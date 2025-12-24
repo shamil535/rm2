@@ -1,0 +1,10 @@
+{
+  "name": "remote-control-server",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo 'Build complete'"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^4.0.0"
+  }
+}

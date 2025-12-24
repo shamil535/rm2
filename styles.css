@@ -1,0 +1,1000 @@
+:root {
+    --primary: #0f0f23;
+    --secondary: #00ff41;
+    --accent: #ff00ff;
+    --dark: #0a0a0a;
+    --light: #1a1a2e;
+    --danger: #ff5555;
+    --warning: #ffaa00;
+    --success: #00ff88;
+    --info: #5555ff;
+    --text: #cccccc;
+    --border: rgba(0, 255, 65, 0.3);
+    --shadow: rgba(0, 255, 65, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--primary);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* Терминальный эффект */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(rgba(15, 15, 35, 0.95), rgba(15, 15, 35, 0.95)),
+        repeating-linear-gradient(0deg, 
+            transparent, 
+            transparent 1px, 
+            rgba(0, 255, 65, 0.03) 1px, 
+            rgba(0, 255, 65, 0.03) 2px);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+    padding: 10px;
+    gap: 10px;
+}
+
+/* Сайдбар с целями */
+.sidebar {
+    width: 320px;
+    background: rgba(10, 10, 10, 0.9);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 0 20px var(--shadow);
+}
+
+.sidebar-header {
+    padding: 15px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar-header h2 {
+    color: var(--secondary);
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.controls {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-icon {
+    background: rgba(26, 26, 46, 0.8);
+    color: var(--secondary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-icon:hover {
+    background: var(--secondary);
+    color: var(--primary);
+}
+
+.btn-icon.active {
+    background: var(--secondary);
+    color: var(--primary);
+}
+
+.targets-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.empty-state i {
+    font-size: 3em;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.target-item {
+    background: rgba(26, 26, 46, 0.6);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.target-item:hover {
+    border-color: var(--secondary);
+    transform: translateX(5px);
+    box-shadow: 0 0 15px var(--shadow);
+}
+
+.target-item.active {
+    border-color: var(--secondary);
+    background: rgba(0, 255, 65, 0.1);
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+}
+
+.target-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--secondary);
+    opacity: 0;
+    border-radius: 6px 0 0 6px;
+    transition: opacity 0.3s;
+}
+
+.target-item.active::before {
+    opacity: 1;
+}
+
+.target-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.target-name {
+    font-weight: bold;
+    color: var(--secondary);
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-dot.online {
+    background: var(--success);
+    box-shadow: 0 0 8px var(--success);
+}
+
+.status-dot.offline {
+    background: var(--danger);
+    box-shadow: 0 0 8px var(--danger);
+}
+
+.target-id {
+    font-size: 0.8em;
+    color: #888;
+    font-family: monospace;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.target-details {
+    font-size: 0.85em;
+    color: #aaa;
+    line-height: 1.4;
+}
+
+.target-details div {
+    margin-bottom: 2px;
+}
+
+.sidebar-footer {
+    padding: 12px 15px;
+    border-top: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9em;
+}
+
+.stat i {
+    font-size: 0.7em;
+}
+
+/* Основная область */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+}
+
+/* Панель статуса */
+.status-bar {
+    background: rgba(10, 10, 10, 0.9);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.status-left, .status-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.current-target .label,
+.connection-status,
+.fps-counter .label,
+.latency-counter .label,
+.quality-control .label {
+    color: #888;
+    margin-right: 5px;
+}
+
+.current-target .value {
+    color: var(--secondary);
+    font-weight: bold;
+}
+
+.connection-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.connection-status .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.quality-control select {
+    background: rgba(26, 26, 46, 0.8);
+    color: var(--secondary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-family: inherit;
+}
+
+/* Контейнер экрана */
+.screen-container {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.screen-header {
+    padding: 12px 15px;
+    background: rgba(10, 10, 10, 0.95);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.screen-title {
+    color: var(--secondary);
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.screen-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-primary, .btn-secondary, .btn-danger {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background: rgba(0, 255, 65, 0.2);
+    color: var(--secondary);
+    border-color: var(--secondary);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--secondary);
+    color: var(--primary);
+}
+
+.btn-secondary {
+    background: rgba(26, 26, 46, 0.8);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: var(--border);
+    color: var(--secondary);
+}
+
+.btn-danger {
+    background: rgba(255, 85, 85, 0.2);
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-primary:disabled,
+.btn-secondary:disabled,
+.btn-danger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.screen-viewer {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.screen-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    color: var(--secondary);
+    text-align: center;
+}
+
+.screen-overlay i {
+    font-size: 3em;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+#screenCanvas {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border: 1px solid rgba(0, 255, 65, 0.2);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+.screen-control-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+}
+
+.screen-info {
+    padding: 8px 15px;
+    background: rgba(10, 10, 10, 0.8);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    font-size: 0.9em;
+    color: #aaa;
+}
+
+/* Панель управления */
+.control-panel {
+    background: rgba(10, 10, 10, 0.9);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.tabs {
+    display: flex;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+}
+
+.tab-btn {
+    padding: 10px 15px;
+    background: transparent;
+    color: #888;
+    border: none;
+    border-right: 1px solid var(--border);
+    cursor: pointer;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.tab-btn:hover {
+    color: var(--secondary);
+    background: rgba(0, 255, 65, 0.1);
+}
+
+.tab-btn.active {
+    color: var(--secondary);
+    background: rgba(0, 255, 65, 0.2);
+    border-bottom: 2px solid var(--secondary);
+}
+
+.tab-content {
+    padding: 15px;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* Управление мышью */
+.mouse-controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.mouse-buttons, .mouse-scroll, .mouse-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.mouse-btn, .scroll-btn, .action-btn {
+    padding: 10px;
+    background: rgba(26, 26, 46, 0.8);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.mouse-btn:hover, .scroll-btn:hover, .action-btn:hover {
+    background: var(--secondary);
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.mouse-btn.left-click:hover {
+    background: #007bff;
+    border-color: #007bff;
+}
+
+.mouse-btn.right-click:hover {
+    background: #dc3545;
+    border-color: #dc3545;
+}
+
+.mouse-btn.middle-click:hover {
+    background: #28a745;
+    border-color: #28a745;
+}
+
+/* Управление клавиатурой */
+.keyboard-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.text-input-container {
+    display: flex;
+    gap: 10px;
+}
+
+#keyboardInput {
+    flex: 1;
+    padding: 10px;
+    background: rgba(26, 26, 46, 0.8);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: inherit;
+}
+
+#keyboardInput:focus {
+    outline: none;
+    border-color: var(--secondary);
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+.special-keys {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.function-keys {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+}
+
+.key-btn {
+    padding: 8px 5px;
+    background: rgba(26, 26, 46, 0.8);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.key-btn:hover {
+    background: var(--secondary);
+    color: var(--primary);
+    transform: scale(0.95);
+}
+
+.key-btn.small {
+    padding: 6px 3px;
+    font-size: 0.9em;
+}
+
+/* Системные команды */
+.system-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.system-category h4 {
+    color: var(--secondary);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.system-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.sys-btn {
+    padding: 8px 12px;
+    background: rgba(26, 26, 46, 0.8);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sys-btn:hover {
+    background: var(--secondary);
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.sys-btn.danger {
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+.sys-btn.danger:hover {
+    background: var(--danger);
+    color: white;
+}
+
+/* Файловый менеджер */
+.file-manager {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.file-tools {
+    display: flex;
+    gap: 10px;
+}
+
+.file-btn {
+    padding: 8px 12px;
+    background: rgba(26, 26, 46, 0.8);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.file-btn:hover {
+    background: var(--secondary);
+    color: var(--primary);
+}
+
+.file-path {
+    display: flex;
+    gap: 10px;
+}
+
+#filePath {
+    flex: 1;
+    padding: 8px;
+    background: rgba(26, 26, 46, 0.8);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+}
+
+.file-list {
+    height: 150px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px;
+    background: rgba(26, 26, 46, 0.4);
+}
+
+/* Расширенные команды */
+.advanced-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.advanced-section h4 {
+    color: var(--secondary);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.advanced-buttons, .client-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.adv-btn, .client-btn {
+    padding: 8px 12px;
+    background: rgba(26, 26, 46, 0.8);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.adv-btn:hover, .client-btn:hover {
+    background: var(--secondary);
+    color: var(--primary);
+}
+
+.client-btn.danger {
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+.client-btn.danger:hover {
+    background: var(--danger);
+    color: white;
+}
+
+.code-execute {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#codeInput {
+    height: 80px;
+    padding: 10px;
+    background: rgba(26, 26, 46, 0.8);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: 'Consolas', monospace;
+    resize: vertical;
+}
+
+/* Правая инфо-панель */
+.info-sidebar {
+    width: 280px;
+    background: rgba(10, 10, 10, 0.9);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.info-header {
+    padding: 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.info-header h3 {
+    color: var(--secondary);
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-content {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.info-section {
+    margin-bottom: 20px;
+}
+
+.info-section h4 {
+    color: var(--text);
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding: 4px 0;
+}
+
+.info-label {
+    color: #888;
+    font-size: 0.9em;
+}
+
+.info-value {
+    color: var(--secondary);
+    font-weight: 500;
+    text-align: right;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.info-actions {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: rgba(10, 10, 10, 0.95);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
+}
+
+.modal-content h3 {
+    color: var(--secondary);
+    margin-bottom: 15px;
+}
+
+.modal-content p {
+    margin-bottom: 20px;
+    color: #aaa;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Уведомления */
+#notificationContainer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notification {
+    padding: 12px 15px;
+    background: rgba(10, 10, 10, 0.95);
+    border: 1px solid;
+    border-radius: 4px;
+    color: white;
+    min-width: 250px;
+    max-width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.notification.success {
+    border-color: var(--success);
+    background: rgba(0, 255, 136, 0.1);
+}
+
+.notification.error {
+    border-color: var(--danger);
+    background: rgba(255, 85, 85, 0.1);
+}
+
+.notification.warning {
+    border-color: var(--warning);
+    background: rgba(255, 170, 0, 0.1);
+}
+
+.notification.info {
+    border-color: var(--info);
+    background: rgba(85, 85, 255, 0.1);
+}
+
+/* Скроллбар */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(10, 10, 10, 0.5);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--secondary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #00cc33;
+}
+
+/* Адаптивность */
+@media (max-width: 1400px) {
+    .app-container {
+        flex-wrap: wrap;
+    }
+    
+    .sidebar, .info-sidebar {
+        width: 250px;
+    }
+    
+    .main-content {
+        min-width: 600px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .app-container {
+        flex-direction: column;
+    }
+    
+    .sidebar, .info-sidebar {
+        width: 100%;
+        height: 200px;
+    }
+    
+    .sidebar .targets-list {
+        display: flex;
+        overflow-x: auto;
+    }
+    
+    .target-item {
+        min-width: 200px;
+        margin-right: 10px;
+    }
+}
